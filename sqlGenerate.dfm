@@ -1,8 +1,8 @@
 object Form1: TForm1
   Left = 226
   Top = 65
-  Width = 855
-  Height = 573
+  Width = 861
+  Height = 583
   Caption = 'Generating SQL Query'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -651,8 +651,8 @@ object Form1: TForm1
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 508
-    Width = 847
+    Top = 506
+    Width = 845
     Height = 19
     Panels = <>
     SimplePanel = True
