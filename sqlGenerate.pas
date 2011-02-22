@@ -89,6 +89,7 @@ type
     ClassesLabel: TLabel;
     CapabilitiesLabel: TLabel;
     SearchQueriesLabel: TLabel;
+    Button1: TButton;
     procedure ListBox1Click(Sender: TObject);
     procedure QuitClick(Sender: TObject);
     procedure CheckCarClick(Sender: TObject);
@@ -108,6 +109,7 @@ type
     procedure SetRestrictionsToAnyClick(Sender: TObject);
     procedure CreateBucketClick(Sender: TObject);
     procedure ClearLogClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -1001,6 +1003,11 @@ end;
 procedure TForm1.ClearLogClick(Sender: TObject);
 begin
 TestMemo2.Clear;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+showmessage('asdasdasd[eq');
 end;
 
 end.

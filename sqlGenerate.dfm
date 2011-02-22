@@ -565,6 +565,15 @@ object Form1: TForm1
               86
               197)
           end
+          object Button1: TButton
+            Left = 704
+            Top = 120
+            Width = 75
+            Height = 25
+            Caption = 'Button1'
+            TabOrder = 8
+            OnClick = Button1Click
+          end
         end
         object BucketTab: TTabSheet
           Caption = 'Bucket'

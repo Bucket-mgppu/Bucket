@@ -1,8 +1,8 @@
 object Form1: TForm1
-  Left = 301
-  Top = 112
-  Width = 893
-  Height = 680
+  Left = 226
+  Top = 65
+  Width = 855
+  Height = 573
   Caption = 'Generating SQL Query'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -131,10 +131,10 @@ object Form1: TForm1
     Visible = False
   end
   object GlobalPageControl: TPageControl
-    Left = 16
-    Top = 24
+    Left = 0
+    Top = 0
     Width = 841
-    Height = 537
+    Height = 505
     ActivePage = WorkTab
     TabOrder = 6
     object WorkTab: TTabSheet
@@ -143,7 +143,7 @@ object Form1: TForm1
         Left = 0
         Top = 4
         Width = 833
-        Height = 501
+        Height = 469
         ActivePage = SQLTab
         MultiLine = True
         TabOrder = 0
@@ -158,7 +158,7 @@ object Form1: TForm1
           end
           object ClearButton: TButton
             Left = 8
-            Top = 436
+            Top = 404
             Width = 75
             Height = 25
             Caption = 'Clear'
@@ -167,7 +167,7 @@ object Form1: TForm1
           end
           object GeneratedQuery: TMemo
             Left = 8
-            Top = 360
+            Top = 328
             Width = 569
             Height = 73
             Lines.Strings = (
@@ -179,7 +179,7 @@ object Form1: TForm1
             Left = 8
             Top = 144
             Width = 569
-            Height = 217
+            Height = 185
             Caption = 'What to search and show'
             TabOrder = 2
             object CapabilitiesLabel: TLabel
@@ -198,7 +198,7 @@ object Form1: TForm1
             end
             object CheckAll: TCheckBox
               Left = 8
-              Top = 184
+              Top = 152
               Width = 81
               Height = 17
               Alignment = taLeftJustify
@@ -214,7 +214,7 @@ object Form1: TForm1
             end
             object GenerateButton: TButton
               Left = 424
-              Top = 184
+              Top = 152
               Width = 137
               Height = 25
               Caption = 'Generate SQL Query'
@@ -529,7 +529,7 @@ object Form1: TForm1
           end
           object CreateBucket: TButton
             Left = 392
-            Top = 440
+            Top = 408
             Width = 185
             Height = 25
             Caption = 'Create Bucket with SQL Query >>'
@@ -548,7 +548,7 @@ object Form1: TForm1
             Left = 16
             Top = 176
             Width = 257
-            Height = 145
+            Height = 113
             Columns = 2
             ItemHeight = 13
             TabOrder = 6
@@ -557,7 +557,7 @@ object Form1: TForm1
             Left = 280
             Top = 176
             Width = 289
-            Height = 145
+            Height = 113
             FixedColor = clWindow
             FixedCols = 1
             TabOrder = 7
@@ -637,12 +637,13 @@ object Form1: TForm1
     Height = 25
     Caption = 'Quit'
     TabOrder = 3
+    Visible = False
     OnClick = QuitClick
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 603
-    Width = 877
+    Top = 508
+    Width = 847
     Height = 19
     Panels = <>
     SimplePanel = True
