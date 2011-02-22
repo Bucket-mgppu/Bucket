@@ -2,9 +2,9 @@ program Project1;
 
 uses
   Forms,
-  sqlGenerate in 'sqlGenerate.pas' {Form1},
-  abramov in 'abramov.pas',
-  dumin in 'dumin.pas';
+  sqlGenerate in '..\2011-02-19 19-40 interface +generating +bucket\sqlGenerate.pas' {Form1},
+  abramov in '..\2011-02-19 19-40 interface +generating +bucket\abramov.pas',
+  dumin in '..\2011-02-19 19-40 interface +generating +bucket\dumin.pas';
 
 {$R *.res}
 
