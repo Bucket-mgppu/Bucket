@@ -1,9 +1,8 @@
 object Form1: TForm1
   Left = 195
   Top = 111
-  Width = 893
-  Height = 616
-  VertScrollBar.Position = 54
+  Width = 879
+  Height = 609
   Caption = 'Generating SQL Query'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,7 +17,7 @@ object Form1: TForm1
   TextHeight = 13
   object Label1: TLabel
     Left = 16
-    Top = -40
+    Top = 14
     Width = 20
     Height = 24
     Caption = 'Q:'
@@ -32,23 +31,23 @@ object Form1: TForm1
   end
   object Label6: TLabel
     Left = 16
-    Top = -14
+    Top = 40
     Width = 72
     Height = 13
     Caption = 'Classes / types'
   end
   object TestMemo: TMemo
     Left = 824
-    Top = 2
+    Top = 56
     Width = 137
     Height = 89
     ScrollBars = ssVertical
-    TabOrder = 4
+    TabOrder = 3
     Visible = False
   end
   object ListBox1: TListBox
     Left = 824
-    Top = -46
+    Top = 8
     Width = 185
     Height = 41
     ItemHeight = 13
@@ -63,7 +62,7 @@ object Form1: TForm1
   end
   object Classes: TGroupBox
     Left = 648
-    Top = -46
+    Top = 8
     Width = 137
     Height = 129
     Caption = 'Classes / types'
@@ -124,7 +123,7 @@ object Form1: TForm1
   end
   object Edit1: TEdit
     Left = 40
-    Top = -38
+    Top = 16
     Width = 593
     Height = 21
     TabOrder = 0
@@ -133,18 +132,18 @@ object Form1: TForm1
   end
   object GlobalPageControl: TPageControl
     Left = 16
-    Top = -30
+    Top = 24
     Width = 841
-    Height = 537
-    ActivePage = SettingsTab
-    TabOrder = 6
+    Height = 505
+    ActivePage = WorkTab
+    TabOrder = 5
     object WorkTab: TTabSheet
       Caption = 'Work'
       object WorkPageControl: TPageControl
         Left = 0
         Top = 4
         Width = 833
-        Height = 501
+        Height = 469
         ActivePage = SQLTab
         MultiLine = True
         TabOrder = 0
@@ -159,7 +158,7 @@ object Form1: TForm1
           end
           object ClearButton: TButton
             Left = 8
-            Top = 436
+            Top = 412
             Width = 75
             Height = 25
             Caption = 'Clear'
@@ -168,7 +167,7 @@ object Form1: TForm1
           end
           object GeneratedQuery: TMemo
             Left = 8
-            Top = 360
+            Top = 336
             Width = 569
             Height = 73
             Lines.Strings = (
@@ -180,7 +179,7 @@ object Form1: TForm1
             Left = 8
             Top = 144
             Width = 569
-            Height = 217
+            Height = 193
             Caption = 'What to search and show'
             TabOrder = 2
             object CapabilitiesLabel: TLabel
@@ -199,7 +198,7 @@ object Form1: TForm1
             end
             object CheckAll: TCheckBox
               Left = 8
-              Top = 184
+              Top = 160
               Width = 81
               Height = 17
               Alignment = taLeftJustify
@@ -215,7 +214,7 @@ object Form1: TForm1
             end
             object GenerateButton: TButton
               Left = 424
-              Top = 184
+              Top = 160
               Width = 137
               Height = 25
               Caption = 'Generate SQL Query'
@@ -530,7 +529,7 @@ object Form1: TForm1
           end
           object CreateBucket: TButton
             Left = 392
-            Top = 440
+            Top = 416
             Width = 185
             Height = 25
             Caption = 'Create Bucket with SQL Query >>'
@@ -549,7 +548,7 @@ object Form1: TForm1
             Left = 16
             Top = 176
             Width = 257
-            Height = 145
+            Height = 121
             Columns = 2
             ItemHeight = 13
             TabOrder = 6
@@ -558,7 +557,7 @@ object Form1: TForm1
             Left = 280
             Top = 176
             Width = 289
-            Height = 145
+            Height = 121
             FixedColor = clWindow
             FixedCols = 1
             TabOrder = 7
@@ -629,7 +628,7 @@ object Form1: TForm1
           ImageIndex = 2
           object Label7: TLabel
             Left = 248
-            Top = 400
+            Top = 384
             Width = 146
             Height = 13
             Caption = 'Enter the name of a new class:'
@@ -646,7 +645,7 @@ object Form1: TForm1
           end
           object Button1: TButton
             Left = 16
-            Top = 408
+            Top = 392
             Width = 145
             Height = 33
             Caption = 'Add row and column'
@@ -655,7 +654,7 @@ object Form1: TForm1
           end
           object Button2: TButton
             Left = 664
-            Top = 408
+            Top = 384
             Width = 145
             Height = 33
             Caption = 'Add a new class'
@@ -664,7 +663,7 @@ object Form1: TForm1
           end
           object Edit2: TEdit
             Left = 248
-            Top = 416
+            Top = 400
             Width = 305
             Height = 21
             TabOrder = 3
@@ -673,19 +672,10 @@ object Form1: TForm1
       end
     end
   end
-  object Quit: TButton
-    Left = 784
-    Top = 514
-    Width = 75
-    Height = 25
-    Caption = 'Quit'
-    TabOrder = 3
-    OnClick = QuitClick
-  end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 539
-    Width = 860
+    Top = 532
+    Width = 863
     Height = 19
     Panels = <>
     SimplePanel = True

@@ -18,7 +18,6 @@ type
     CheckNewCar: TCheckBox;
     CheckMotorcycle: TCheckBox;
     ListBox1: TListBox;
-    Quit: TButton;
     TestMemo: TMemo;
     Label6: TLabel;
     StatusBar1: TStatusBar;
@@ -528,7 +527,7 @@ begin
       ArrSourceClass[5] := 'Motorcycle';
       ArrSourceClass[6] := 'Product'; }        // теперь заполняем из файла
 
-      AssignFile(F,'C:\Classname.txt');    // читаем названия имеющихся полей из файла    вместо явного присваивания
+      AssignFile(F,'Classname.txt');    // читаем названия имеющихся полей из файла    вместо явного присваивания
       Reset(F);
       indmas:=1;
       While not Eof(F) do begin
@@ -539,7 +538,7 @@ begin
 
           // Загружаем классы  в ListBox
           for i:=0 to (high(ArrSourceClass))-1 do begin
-              //if (ArrSourceClass[i] <> '') then             // добавил единички потому как индексация идет с нуля
+              if (ArrSourceClass[i+1] <> '') then             // добавил единички потому как индексация идет с нуля
                ClassList.Items.Add('(' + IntToStr(i+1) + ') ' + ArrSourceClass[i+1]);
           end;
 
@@ -581,7 +580,7 @@ begin
       ArrDisjointClasses[6,5]:= 1;
       ArrDisjointClasses[6,6]:= 1; }     // теперь заполняем из файла
 
-  AssignFile(C,'C:\Colrow.txt');
+  AssignFile(C,'Colrow.txt');
   Reset(C);
   ReadLn (C , coltabl);
   ReadLn (C , rowtabl);
@@ -593,7 +592,7 @@ begin
  StringGrid1.ColCount:= StrToInt(coltabl);
 
       tablstr:='';
-      AssignFile(D,'C:\SaveTabl.txt');
+      AssignFile(D,'SaveTabl.txt');
       Reset(D);
       While not Eof(D) do begin
         for i:=0 to High(ArrDisjointClasses) do begin
@@ -1114,7 +1113,7 @@ begin
    end;
  end;
 
- AssignFile(F,'C:\Classname.txt'); 
+ AssignFile(F,'Classname.txt');
  Reset(F);
  Append(F);
  WriteLn(F,Trim(Edit2.Text));
@@ -1125,7 +1124,7 @@ begin
    end;
     StringGrid1.Cells[(StringGrid1.ColCount)-1,(StringGrid1.ColCount)-1]:='1';
 
- AssignFile(D,'C:\SaveTabl.txt');
+ AssignFile(D,'SaveTabl.txt');
  Rewrite(D);
  tablstr:='';
  for i:= 1 to StringGrid1.RowCount-1 do begin
@@ -1153,7 +1152,7 @@ begin
  StringGrid1.RowCount:= StringGrid1.RowCount + 1;
  StringGrid1.ColCount:= StringGrid1.ColCount + 1;
 
- AssignFile(C,'C:\Colrow.txt');
+ AssignFile(C,'Colrow.txt');
   Rewrite(C);
   WriteLn (C , IntToStr(StringGrid1.RowCount));
   WriteLn (C , IntToStr(StringGrid1.ColCount));

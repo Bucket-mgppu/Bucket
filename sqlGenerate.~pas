@@ -18,7 +18,6 @@ type
     CheckNewCar: TCheckBox;
     CheckMotorcycle: TCheckBox;
     ListBox1: TListBox;
-    Quit: TButton;
     TestMemo: TMemo;
     Label6: TLabel;
     StatusBar1: TStatusBar;
@@ -89,7 +88,11 @@ type
     ClassesLabel: TLabel;
     CapabilitiesLabel: TLabel;
     SearchQueriesLabel: TLabel;
+    StringGrid1: TStringGrid;
     Button1: TButton;
+    Button2: TButton;
+    Edit2: TEdit;
+    Label7: TLabel;
     procedure ListBox1Click(Sender: TObject);
     procedure QuitClick(Sender: TObject);
     procedure CheckCarClick(Sender: TObject);
@@ -109,6 +112,7 @@ type
     procedure SetRestrictionsToAnyClick(Sender: TObject);
     procedure CreateBucketClick(Sender: TObject);
     procedure ClearLogClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
@@ -129,7 +133,7 @@ var
   ArrSourceCapabilities: array [1..10] of AnsiString;  // ВВОД: возможности источников
   ArrQueryWhat: array [1..10] of AnsiString; // Что будем выбирать - какие поля в таблицах источников
   StrQueryWhat: AnsiString;  // Строковое значение полей для SQL-запроса
-  ArrSourceClass: array [1..10] of AnsiString; // ВВОД: список исходных классов, возможных в источниках
+  ArrSourceClass: array [1..20] of AnsiString; // ВВОД: список исходных классов, возможных в источниках
   ArrQueryClass: array [1..10] of AnsiString; // Какие выбираем классы
   StrQueryClass: AnsiString;  // Строковое значение классов для SQL-запроса
   ArrQueryRestrictions: array [1..10] of AnsiString; // Пользовательские ограничения для запроса
@@ -137,7 +141,8 @@ var
   ArrQuerySearches: array [1..10] of AnsiString;  // Пользовательские ограничения для текстовых полей - текстовый поиск для запроса
   StrQuerySearches: AnsiString;  // Строковое значение поиска для SQL-запроса
 
-  ArrDisjointClasses: array [1..6,1..6] of integer; // Таблица отношений классов - бинарные джойнт и дисджойнт
+ // ArrDisjointClasses: array [1..6,1..6] of integer; // Таблица отношений классов - бинарные джойнт и дисджойнт
+  ArrDisjointClasses: array of array of integer ; // что бы иметь возможность добавлять классы я желаю массив динамическим   (Кирилл)
   ArrDisjointClassesMatrix: IMltArray; // Ассоциативный массив бинарных отношений, стоится на Таблице отношений классов и Списке исходных классов
                                        // Формат ArrDisjointClassesMatrix[classname1][classname2] = DjointOrNot{0,1}
 
@@ -171,7 +176,9 @@ var
   ArrQueryRestrictionsMatrix:  IMltArray; // Ограничения в Запросе в виде ассоциативного массива - для обработки в Ведре
                                           // Формат ArrQueryRestrictionsMatrix[ArrQueryRestrictions[i]]['>,<,=,>=,<='] = IntValue // = 2000, = 1960
 
-
+  kon : integer;  // хранит номер последнего непустого эл-та в массиве AeeSourceClasses
+  najal : integer; // нужна для управления процессом добавления классов
+  najal2raza : integer; // что бы нельзя было добавить два новых столбца
 
 implementation
 
@@ -477,8 +484,14 @@ end;*)
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  CurrentMemory,EndMemory,j,k: integer;
+  CurrentMemory,EndMemory,j,k,indmas: integer;
+  coltabl,rowtabl,tablstr : string;
+  C : TextFile;
+  F : TextFile;
+  D : TextFile;
 begin
+ najal:=0;
+ najal2raza:=0;
  StartMemory := AllocMemSize;
  StatusBar1.SimpleText := 'Memory allocated at start: ' + IntToStr(StartMemory) + ' bytes';
 
@@ -507,21 +520,31 @@ begin
       end;
 
       // Массив со всеми возможными классами в источниках
-      ArrSourceClass[1] := 'Car';
+      {ArrSourceClass[1] := 'Car';
       ArrSourceClass[2] := 'CarForSale';
       ArrSourceClass[3] := 'UsedCar';
       ArrSourceClass[4] := 'NewCar';
       ArrSourceClass[5] := 'Motorcycle';
-      ArrSourceClass[6] := 'Product';
+      ArrSourceClass[6] := 'Product'; }        // теперь заполняем из файла
+
+      AssignFile(F,'Classname.txt');    // читаем названия имеющихся полей из файла    вместо явного присваивания
+      Reset(F);
+      indmas:=1;
+      While not Eof(F) do begin
+        ReadLn(F,ArrSourceClass[indmas]);
+        Inc(indmas);
+      end;
+      CloseFile(F);
 
           // Загружаем классы  в ListBox
-          for i:=1 to high(ArrSourceClass) do begin
-               if (ArrSourceClass[i] <> '') then
-               ClassList.Items.Add('(' + IntToStr(i) + ') ' + ArrSourceClass[i]);
+          for i:=0 to (high(ArrSourceClass))-1 do begin
+              if (ArrSourceClass[i+1] <> '') then             // добавил единички потому как индексация идет с нуля
+               ClassList.Items.Add('(' + IntToStr(i+1) + ') ' + ArrSourceClass[i+1]);
           end;
 
       // Djoint and Disjoint classes
-      ArrDisjointClasses[1,1]:= 1;
+
+    {  ArrDisjointClasses[1,1]:= 1;
       ArrDisjointClasses[1,2]:= 1;
       ArrDisjointClasses[1,3]:= 1;
       ArrDisjointClasses[1,4]:= 1;
@@ -555,7 +578,33 @@ begin
       ArrDisjointClasses[6,3]:= 1;
       ArrDisjointClasses[6,4]:= 1;
       ArrDisjointClasses[6,5]:= 1;
-      ArrDisjointClasses[6,6]:= 1;
+      ArrDisjointClasses[6,6]:= 1; }     // теперь заполняем из файла
+
+  AssignFile(C,'Colrow.txt');
+  Reset(C);
+  ReadLn (C , coltabl);
+  ReadLn (C , rowtabl);
+  CloseFile(C);
+
+ SetLength( ArrDisjointClasses , (StrToInt(coltabl))-1 , (StrToInt(rowtabl))-1 );
+
+ StringGrid1.RowCount:= StrToInt(rowtabl);
+ StringGrid1.ColCount:= StrToInt(coltabl);
+
+      tablstr:='';
+      AssignFile(D,'SaveTabl.txt');
+      Reset(D);
+      While not Eof(D) do begin
+        for i:=0 to High(ArrDisjointClasses) do begin
+           ReadLn(D,tablstr);
+           for j:=0 to (Length(tablstr))-1 do begin
+               ArrDisjointClasses[i,j] := StrToInt(tablstr[j+1]);
+               StringGrid1.Cells[j+1,i+1] := tablstr[j+1];
+           end;
+           tablstr:='';
+        end;
+      end;
+      CloseFile(D);
 
       // Массив со всеми возможными ограничениями в Запросе
       ArrQueryRestrictions[1] := 'Year';
@@ -580,8 +629,8 @@ begin
 
       // Альтернативная запись таблицы отношений классов - в ассоциативном массиве.
       ArrDisjointClassesMatrix := CreateArray;
-      for j:=1 to high (ArrSourceClass) do
-      begin
+    {  for j:=1 to high (ArrSourceClass) do
+      begin                                       // убрал эту часть и заменил кодом  ниже   (Кирилл)
          if (ArrSourceClass[j] <> '') then
          begin
             for k:=1 to high (ArrSourceClass) do
@@ -595,8 +644,19 @@ begin
             end;
           end
           else break;
+      end;     }
+      kon:=0;
+      for i:=1 to High(ArrSourceClass) do begin
+        if ArrSourceClass[i]<>'' then kon:=kon+1
+        else Break;
       end;
 
+      for j:=0 to kon-1 do begin
+          for k:=0 to kon-1 do begin
+             ArrDisjointClassesMatrix[ArrSourceClass[j+1]][ArrSourceClass[k+1]].AsInteger := ArrDisjointClasses[j,k];
+             TestMemo2.Lines.Add('[' + ArrSourceClass[j] + '][' + ArrSourceClass[k] + '] = ' + IntToStr(ArrDisjointClassesMatrix[ArrSourceClass[j]][ArrSourceClass[k]].AsInteger));
+          end;
+       end;
 
 // ОПИСАНИЕ ИСТОЧНИКОВ
       Source1 := CreateArray;
@@ -675,7 +735,20 @@ begin
 
 
 
-end;
+  for i:=1 to (StringGrid1.RowCount - 1) do begin
+    if ArrSourceClass[i]<>'' then
+      StringGrid1.Cells[0,i]:= ArrSourceClass[i]
+    else Break;
+  end;
+
+  for i:=1 to (StringGrid1.ColCount - 1) do begin
+    if ArrSourceClass[i]<>'' then
+      StringGrid1.Cells[i,0]:= ArrSourceClass[i]
+    else Break;
+  end;
+
+
+end;    // конец процедуры создания формы
 
 (*procedure TForm1.ModelClick(Sender: TObject);
 begin
@@ -695,6 +768,8 @@ begin
   if Category.Checked = false
  then SearchCategory.Enabled := false;
 end; *)
+
+
 
 procedure TForm1.CheckAllClick(Sender: TObject);
 begin
@@ -1005,9 +1080,88 @@ begin
 TestMemo2.Clear;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button2Click(Sender: TObject);
+var
+i,j :integer;
+F : TextFile;
+D : TextFile;
+tablstr : string;
 begin
-showmessage('asdasdasd[eq');
+  najal2raza:=najal2raza-1;
+ if Edit2.Text='' then begin
+   Showmessage('Введите имя нового класса');
+   Exit;
+ end;
+
+ if najal=0 then begin
+   Showmessage('Добавьте новые строку и столбец');
+   Exit;
+ end;
+ najal:=1;
+ for i:=1 to (StringGrid1.ColCount)-2 do begin
+    if StringGrid1.Cells[(StringGrid1.ColCount)-1,i]='' then begin
+    Showmessage('Введите отношения классов');
+    Exit;
+    end;
+ end;
+ for i:=1 to High(ArrSourceClass) do begin
+   if ArrSourceClass[i]='' then begin
+     ArrSourceClass[i]:=Trim(Edit2.Text);
+     StringGrid1.Cells[StringGrid1.ColCount-1,0]:= ArrSourceClass[i];
+     StringGrid1.Cells[0,StringGrid1.RowCount-1]:= ArrSourceClass[i];
+     Break;
+   end;
+ end;
+
+ AssignFile(F,'Classname.txt');
+ Reset(F);
+ Append(F);
+ WriteLn(F,Trim(Edit2.Text));
+ CloseFile(F);
+
+   for i:=1 to (StringGrid1.ColCount)-1 do begin
+      StringGrid1.Cells[i,(StringGrid1.ColCount)-1]:=StringGrid1.Cells[(StringGrid1.ColCount)-1,i];
+   end;
+    StringGrid1.Cells[(StringGrid1.ColCount)-1,(StringGrid1.ColCount)-1]:='1';
+
+ AssignFile(D,'SaveTabl.txt');
+ Rewrite(D);
+ tablstr:='';
+ for i:= 1 to StringGrid1.RowCount-1 do begin
+ tablstr:='';
+   for j:=1 to StringGrid1.ColCount-1 do begin
+      tablstr:=tablstr + StringGrid1.Cells[j,i];
+      ArrDisjointClasses[i-1,j-1] :=StrToInt(StringGrid1.Cells[j,i]);
+   end;
+ WriteLn(D,tablstr);  
+ end;
+ CloseFile(D);
+
+ Showmessage('Новый класс успешно добавлен');
+
+
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+C : TextFile;
+begin
+ najal:=1;
+ najal2raza:=najal2raza+1;
+ if najal2raza>1 then Exit;
+ StringGrid1.RowCount:= StringGrid1.RowCount + 1;
+ StringGrid1.ColCount:= StringGrid1.ColCount + 1;
+
+ AssignFile(C,'Colrow.txt');
+  Rewrite(C);
+  WriteLn (C , IntToStr(StringGrid1.RowCount));
+  WriteLn (C , IntToStr(StringGrid1.ColCount));
+ CloseFile(C);
+
+SetLength( ArrDisjointClasses , StringGrid1.RowCount-1 , StringGrid1.ColCount-1 );
+
+
+
 end;
 
 end.

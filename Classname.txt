@@ -4,3 +4,4 @@ UsedCar
 NewCar
 Motorcycle
 Product
+SuperCar
